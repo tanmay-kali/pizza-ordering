@@ -13,6 +13,9 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const flash = require("express-flash");
 const MongoDbStore = require("connect-mongo");
+const passport = require("passport");
+
+var bodyParser = require("body-parser");
 
 const url =
   "mongodb+srv://admin:tanmay28@cluster0.tcbwb.mongodb.net/pizza?retryWrites=true&w=majority";
@@ -26,6 +29,7 @@ const connection = mongoose.connection;
 connection.once("open", () => {
   console.log("Database connected...");
 });
+
 //Session Store
 let mongoStore = MongoDbStore.create({
   mongoUrl: url,
@@ -33,6 +37,7 @@ let mongoStore = MongoDbStore.create({
 });
 
 app.use(express.json());
+app.use(express.urlencoded({extended: false}));
 //Session Config
 //saving cookies in db
 app.use(
@@ -45,12 +50,19 @@ app.use(
   })
 );
 
+//passport config
+const passportInit = require("./app/config/passport");
+passportInit(passport);
+app.use(passport.initialize());
+app.use(passport.session());
+
 //session
 app.use(flash());
 
 //Middleware
 app.use((req, res, next) => {
   res.locals.session = req.session;
+  res.locals.user = req.user;
   next();
 });
 

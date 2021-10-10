@@ -44,3 +44,7 @@
         - dependancies socket.io
 [ ] Build project for deployment
 [ ] Deploy project on live server
+
+
+
+mongoimport --uri "mongodb+srv://admin:tanmay28@cluster0.tcbwb.mongodb.net/pizza?retryWrites=true&w=majority" --collection menus --type json --file /Users/tanmay/Downloads/pizza-menu.json --jsonArray
